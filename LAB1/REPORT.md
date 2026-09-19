@@ -39,18 +39,18 @@ print(f"{course}: {hours} часов")
 - `"Python"`
 - `print(...)`
 #### Инструкции
--`course = "Python"`
--`hours = 4 * 2`
--`print(...)`
+- `course = "Python"`
+- `hours = 4 * 2`
+- `print(...)`
 #### Литералы
--`"Python"`
--`4`
--`2`
--`3`
--`"часов"`
+- `"Python"`
+- `4`
+- `2`
+- `3`
+- `"часов"`
 #### Имена, создаваемые при выполении
--`course`
--`hours`
+- `course`
+- `hours`
 ### Часть 3. AST и байткод
 #### Версия интерпретатора
 В терминале была выполнена команда:
@@ -60,20 +60,88 @@ python3 --version
 Результат:
 **Python 3.13.7**
 #### AST
-В терминале была выполнена команда:
+В терминале была выполнена команда, для просмотра структуры программы:
 ```text
 python -m ast task_1.py
 ```
+Результат:
+```text
+Module(
+   body=[
+      Expr(
+         value=Call(
+            func=Name(id='print', ctx=Load()),
+            args=[
+               BinOp(
+                  left=Constant(value=2),
+                  op=Add(),
+                  right=BinOp(
+                     left=Constant(value=3),
+                     op=Mult(),
+                     right=Constant(value=4)))])),
+      Assign(
+         targets=[
+            Name(id='course', ctx=Store())],
+         value=Constant(value='Python')),
+      Assign(
+         targets=[
+            Name(id='hours', ctx=Store())],
+         value=BinOp(
+            left=Constant(value=4),
+            op=Mult(),
+            right=Constant(value=2))),
+      Expr(
+         value=Call(
+            func=Name(id='print', ctx=Load()),
+            args=[
+               JoinedStr(
+                  values=[
+                     FormattedValue(
+                        value=Name(id='course', ctx=Load()),
+                        conversion=-1),
+                     Constant(value=': '),
+                     FormattedValue(
+                        value=Name(id='hours', ctx=Load()),
+                        conversion=-1),
+                     Constant(value=' часов')])]))])
+```
 В полученном AST найдены найдены такие узлы, как:
--`Assign` - присваивание
--`BinOp` - арифметика
--`Call` - вызов функции
+- `Assign` - присваивание
+- `BinOp` - арифметика
+- `Call` - вызов функции
 ### Байткод
-В терминале была выполнена команда:
+В терминале была выполнена команда, для просмотра байткода:
 ```text
 python3 -m dis task_1.py
 ```
+Результат:
+```text
+0           RESUME                   0
+1           LOAD_NAME                0 (print)
+              PUSH_NULL
+              LOAD_CONST               0 (14)
+              CALL                     1
+              POP_TOP
+3           LOAD_CONST               1 ('Python')
+              STORE_NAME               1 (course)
+4           LOAD_CONST               2 (8)
+              STORE_NAME               2 (hours)
+5           LOAD_NAME                0 (print)
+              PUSH_NULL
+              LOAD_NAME                1 (course)
+              FORMAT_SIMPLE
+              LOAD_CONST               3 (': ')
+              LOAD_NAME                2 (hours)
+              FORMAT_SIMPLE
+              LOAD_CONST               4 (' часов')
+              BUILD_STRING             4
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             5 (None)
+```
+- `LOAD_CONST` - загрузка констант
+- `CALL` - вызов функции
 В полученном байткоде я нашла инструкции, которые отвечают за загрузку констант и вызов функции 
 ### Контрольный вопрос
-
+Байткод нельзя считать машинным кодом процессора, т.к. это инструкция для Python, а не команды для процессора. Сначала Python обрабатывает этот байткод, а после программа выполняется. 
 
