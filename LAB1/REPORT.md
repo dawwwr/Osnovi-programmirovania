@@ -33,11 +33,11 @@ hours = 4 * 2
 print(f"{course}: {hours} часов")
 ```
 #### Выражения
--`4 * 2`
--`f"{course}: {hours} часов"`
--`2 + 3 * 4`
--`"Python"`
--`print(...)`
+- `4 * 2`
+- `f"{course}: {hours} часов"`
+- `2 + 3 * 4`
+- `"Python"`
+- `print(...)`
 #### Инструкции
 -`course = "Python"`
 -`hours = 4 * 2`
