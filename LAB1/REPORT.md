@@ -282,4 +282,25 @@ math.isclose(a, b)
 ```
 В данном случае она возвращает True, потому что учитывает небольшую погрешность вычислений(`a` близка по значению к `b`). 
 ### Эксперимент D. bool, complex и явное преобразование типов
-
+Запускаем код:
+```python
+print(int("42"), type(int("42")))
+print(float("3.14"), type(float("3.14")))
+print(str(2026), type(str(2026)))
+print(bool(0), type(bool(0)))
+print(bool(-1), type(bool(-1)))
+print(bool(""), type(bool("")))
+print(bool("False"), type(bool("False")))
+print(complex(2, -3), type(complex(2, -3)))
+```
+Результат:
+```text
+42 <class 'int'>
+3.14 <class 'float'>
+2026 <class 'str'>
+False <class 'bool'>
+True <class 'bool'>
+False <class 'bool'>
+True <class 'bool'>
+(2-3j) <class 'complex'>
+```
