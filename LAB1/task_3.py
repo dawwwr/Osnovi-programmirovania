@@ -25,3 +25,7 @@ print(bool(-1), type(bool(-1)))
 print(bool(""), type(bool("")))
 print(bool("False"), type(bool("False")))
 print(complex(2, -3), type(complex(2, -3)))
+
+z = complex(2, -3)
+print('Действительная часть:', z.real)
+print('Мнимая часть:', z.imag)
