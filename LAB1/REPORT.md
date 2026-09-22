@@ -374,41 +374,17 @@ print(student[5:])
     </tr>
     <tr>
         <td>А</td>
-    </tr>
-    <tr>
         <td>н</td>
-    </tr>
-    <tr>
         <td>н</td>
-    </tr>
-    <tr>
         <td>а</td>
-    </tr>
-    <tr>
         <td> </td>
-    </tr>
-    <tr>
         <td>С</td>
-    </tr>
-    <tr>
         <td>м</td>
-    </tr>
-    <tr>
         <td>и</td>
-    </tr>
-    <tr>
         <td>р</td>
-    </tr>
-    <tr>
         <td>н</td>
-    </tr>
-    <tr>
-        <td>о</td>
-    </tr>
-    <tr>
+        <td>о</td> 
         <td>в</td>
-    </tr>
-    <tr>
         <td>а</td>
     </tr>
 </table>
