@@ -45,6 +45,7 @@ config2['Имена участников:'].append('Саша')
 print(config1)
 print(config2)
 print(config1['Имена участников:'] is config2['Имена участников:'])
+print(config1 is config2)
 
 # независимое копирование
 import copy
@@ -55,6 +56,7 @@ config3['Имена участников:'].append('Петя')
 print(config1)
 print(config3)
 print(config1['Имена участников:'] is config3['Имена участников:'])
+print(config1 is config3)
 
 assert 'Петя' not in config1['Имена участников:']
 assert 'Петя' in config3['Имена участников:']
