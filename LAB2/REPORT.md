@@ -145,3 +145,69 @@ False
 Потому что неизменяемые объекты нельзя изменить на месте. Python вычисляет новое значение и создаёт новый объект в памяти и переменная пересвязывается. 
 #### 3. Как определить, что два имени обозначают один объект?
 Использовать оператор `is` или функцию `id()`. 
+## Задание 2. Поверхностное и глубокое копирование
+Код:
+```python
+import copy
+
+original = [
+    ["Python", 5],
+    ["Algorithms", 4],
+]
+
+alias = original
+shallow = original.copy()
+deep = copy.deepcopy(original)
+print(id(original), id(alias), id(shallow), id(deep))
+print(id(original[0]), id(alias[0]), id(shallow[0]), id(deep[0]))
+print(id(original[0][1]), id(alias[0][1]), id(shallow[0][1]), id(deep[0][1]))
+
+original.append(["Databases", 5])
+print(id(original), id(alias), id(shallow), id(deep))
+print(id(original[0]), id(alias[0]), id(shallow[0]), id(deep[0]))
+print(id(original[0][1]), id(alias[0][1]), id(shallow[0][1]), id(deep[0][1]))
+
+original[0][1] = 3
+print(id(original), id(alias), id(shallow), id(deep))
+print(id(original[0]), id(alias[0]), id(shallow[0]), id(deep[0]))
+print(id(original[0][1]), id(alias[0][1]), id(shallow[0][1]), id(deep[0][1]))
+```
+Результат:
+```text
+4346955648 4346955648 4346966912 4346955776
+4346955584 4346955584 4346955584 4346967296
+4343497072 4343497072 4343497072 4343497072
+4346955648 4346955648 4346966912 4346955776
+4346955584 4346955584 4346955584 4346967296
+4343497072 4343497072 4343497072 4343497072
+4346955648 4346955648 4346966912 4346955776
+4346955584 4346955584 4346955584 4346967296
+4343497008 4343497008 4343497008 4343497072
+```
+Таблица наблюдений:
+<table>
+    <tr>
+        <th>Операция</th>
+        <th>Новый внешний объект</th>
+        <th>Новые вложенные объекты</th>
+        <th>Изменения независимы</th>
+    </tr>
+    <tr>
+        <td>Присваивание</td>
+        <td>-(id равны)</td>
+        <td>-(id равны)</td>
+        <td>-(id равны)</td>
+    </tr>
+    <tr>
+        <td>Поверхностная копия</td>
+        <td>+(id разный)</td>
+        <td>-(id равны)</td>
+        <td>-(для вложенных объектов),+(для внешних объектов)</td>
+    </tr>
+    <tr>
+        <td>Глубокая копия</td>
+        <td>+(id разный)</td>
+        <td>+(id разный)</td>
+        <td>+(id разный)</td>
+    </tr>
+</table>
