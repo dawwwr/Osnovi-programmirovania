@@ -293,6 +293,7 @@ else:
 ### Практическое расширение
 Запускаем код:
 ```python
+import time
 def liner_search(a1, x):
     comp = 0
     for i in range(len(a1)):
