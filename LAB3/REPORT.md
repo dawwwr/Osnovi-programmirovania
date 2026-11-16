@@ -707,3 +707,7 @@ Python: LEGB и замыкания
 - `print`, если он используется, находится в области Built-ins.
 
 Схема:
+```mermaid
+graph LR
+A[Built-ins (B); print, len, sum и т. д.] --> C("Global (G); course = "Python"; def demonstrate_legb():") --> B("Local (L) — demonstrate_legb(); topic = "области видимости"; def inner():") --> D("Local (L) — inner(); nonlocal topic; topic = "LEGB и замыкания"; course — берется из Global")
+```
