@@ -711,13 +711,10 @@ Python: LEGB и замыкания
 flowchart TD
     B["Built-ins (B)<br>print, len, sum"]
     G["Global (G)<br>course = 'Python'<br>demonstrate_legb()"]
-    L1["Local (L) — demonstrate_legb()<br>topic = 'области видимости'<br>inner()"]
-    L2["Local (L) — inner()<br>nonlocal topic<br>topic = 'LEGB и замыкания'<br>course — из Global"]
+    L1["Local (L) - demonstrate_legb()<br>topic = 'области видимости'<br>inner()"]
+    L2["Local (L) - inner()<br>nonlocal topic<br>topic = 'LEGB и замыкания'<br>course - из Global"]
 
     B --> G
     G --> L1
     L1 --> L2
-
-    L2 -.->|"ищет topic"| L1
-    L2 -.->|"ищет course"| G
 ```
