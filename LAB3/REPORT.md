@@ -558,3 +558,152 @@ f2('bad anna')
 ```
 Для работы с построенными данными реализованы текстовые запросы: `student`, `best`, `attempts` и `completed`. Введённая строка разделяется на части по пробелам, после чего программа определяет команду и выбирает нужную операцию. Команда `student` выводит список попыток студента, `best` — лучший результат по паре «студент — лабораторная работа», `attempts` — количество попыток, а `completed` — множество студентов, сдававших указанную работу.
 ## Задание 4. Функции, параметры и области видимости
+Запускаем код:
+```python
+def arithmetic_mean(values: list[float]) -> float:
+    """Возвращает среднее арифметическое непустого списка."""
+    if not values:
+        return 0.0
+    return sum(values) / len(values)
+# Проверки arithmetic_mean
+assert arithmetic_mean([1, 2, 3]) == 2.0
+assert arithmetic_mean([10.0, 20.0]) == 15.0
+assert arithmetic_mean([5]) == 5.0
+# Позиционный вызов
+print(arithmetic_mean([4, 8, 15]))
+def normalize_name(name: str) -> str:
+    """Удаляет лишние пробелы и приводит каждую часть имени к нужному регистру."""
+    if not name:
+        return ""
+    parts = [part.capitalize() for part in name.split() if part]
+    return " ".join(parts)
+# Проверки normalize_name
+assert normalize_name("  дарья   стрепеткова ") == "Дарья Стрепеткова"
+assert normalize_name("ANNA MARIE") == "Anna Marie"
+assert normalize_name("   ") == ""
+# Позиционный и именованный вызовы
+print(normalize_name("  иван   петров "))
+print(normalize_name(name="  МАРИЯ   иванова "))
+def build_report(
+    student: str,
+    results: list[int],
+    *,
+    precision: int = 2,
+    prefix: str = "Результат",
+) -> str:
+    """Формирует строковый отчет о результатах студента."""
+    if not student or not results:
+        return f"{prefix} для {student or 'неизвестного студента'} отсутствуют."
+    average = arithmetic_mean(results)
+    return (
+        f"{prefix} студента {student}: "
+        f"средний балл {average:.{precision}f} "
+        f"по {len(results)} результатам."
+    )
+# Проверки build_report
+assert build_report("Иван", [5, 4]) == (
+    "Результат студента Иван: средний балл 4.50 по 2 результатам."
+)
+
+assert build_report("Иван", [5, 4], precision=0) == (
+    "Результат студента Иван: средний балл 5 по 2 результатам."
+)
+assert build_report(student="Иван", results=[5, 4], prefix="Итог") == (
+    "Итог студента Иван: средний балл 4.50 по 2 результатам."
+)
+# Позиционный вызов
+print(build_report("Иван", [5, 4]))
+# Именованный вызов
+print(build_report(student="Иван", results=[5, 4], prefix="Итог"))
+def collect_tags(*tags: str, lowercase: bool = True) -> tuple[str, ...]:
+    """Возвращает очищенные теги без пустых значений и повторов."""
+    cleaned_tags = []
+    for tag in tags:
+        if not tag:
+            continue
+        cleaned_tag = tag.strip()
+        if not cleaned_tag:
+            continue
+        if lowercase:
+            cleaned_tag = cleaned_tag.lower()
+        if cleaned_tag not in cleaned_tags:
+            cleaned_tags.append(cleaned_tag)
+    return tuple(cleaned_tags)
+# Проверки collect_tags
+assert collect_tags(" Python ", "python", "AI") == ("python", "ai")
+assert collect_tags("Python", lowercase=False) == ("Python",)
+assert collect_tags("", "  ", "Data") == ("data",)
+# Позиционный вызов
+print(collect_tags(" Python ", "AI", "python"))
+# Именованный вызов
+print(collect_tags("Python", "AI", lowercase=False))
+# Демонстрация распаковки списка через * и словаря через **
+scores = [85, 90, 78]
+options = {
+    "precision": 1,
+    "prefix": "Итог",
+}
+report = build_report("Дарья Стрепеткова", scores, **options)
+assert report == (
+    "Итог студента Дарья Стрепеткова: "
+    "средний балл 84.3 по 3 результатам."
+)
+print(report)
+```
+Результат:
+```text
+Позиционный вызов
+9.0
+Позиционный и именованный вызовы
+Иван Петров
+Мария Иванова
+Позиционный вызов
+Результат студента Иван: средний балл 4.50 по 2 результатам.
+Именованный вызов
+Итог студента Иван: средний балл 4.50 по 2 результатам.
+Позиционный вызов
+('python', 'ai')
+Именованный вызов
+('Python', 'AI')
+Итог студента Дарья Стрепеткова: средний балл 84.3 по 3 результатам.
+```
+В первой части реализованы четыре функции: `arithmetic_mean()`, `normalize_name()`, `build_report()` и `collect_tags()`. Функции не изменяют переданные коллекции, а создают новые значения для результата. Используется ранний `return`, если функция не может выполнить контракт, например при пустом списке в `arithmetic_mean()` или пустом имени и списке результатов в `build_report()`. В `build_report()` параметры `precision` и `prefix` находятся после `*`, поэтому их можно передавать только по имени. Распаковка списка выполняется через `*`, например в `collect_tags(*tags)`, а распаковка словаря — через `**`, например в `build_report("Дарья Стрепеткова", scores, **options)`. Для каждой функции добавлены не менее трех проверок через assert, которые размещены сразу после определения соответствующей функции.
+### Исследование LEGB
+Запускаем код:
+```python
+print('Исследование LEGB')
+course = "Python"
+def demonstrate_legb() -> str:
+    """Показывает LEGB и изменение переменной объемлющей функции через nonlocal."""
+    topic = "области видимости"
+
+    def inner() -> str:
+        nonlocal topic
+        topic = "LEGB и замыкания"
+        return f"{course}: {topic}"
+
+    return inner()
+legb_result = demonstrate_legb()
+assert legb_result == "Python: LEGB и замыкания"
+assert course == "Python"
+print(legb_result)
+```
+Результат:
+```text
+Исследование LEGB
+Python: LEGB и замыкания
+```
+Во второй части показывается, как Python ищет переменные по правилу LEGB. Есть глобальная переменная course, внешняя функция `demonstrate_legb()` и вложенная функция `inner()`. Внутри `inner()` написано `nonlocal topic`. Это значит, что вложенная функция изменяет переменную `topic`, которая находится в внешней функции `demonstrate_legb()`. Глобальная переменная course при этом не меняется.
+Порядок поиска имени такой:
+- `Local` - сначала Python ищет переменную в текущей функции.
+- `Enclosing` - если не нашел, ищет в внешней функции.
+- `Global` - если не нашел, ищет на уровне всего файла.
+- `Built-ins` — если не нашел, ищет среди встроенных имен Python, например print или len.
+
+В нашем примере:
+- `topic` в inner() находится в внешней функции demonstrate_legb() и изменяется через nonlocal.
+- `course` в inner() находится в глобальной области.
+- `inner` находится в локальной области функции demonstrate_legb().
+- `print`, если он используется, находится в области Built-ins.
+
+Схема:
