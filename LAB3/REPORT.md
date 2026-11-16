@@ -708,6 +708,16 @@ Python: LEGB и замыкания
 
 Схема:
 ```mermaid
-graph LR
-A[Built-ins (B); print, len, sum и т. д.] --> C("Global (G); course = "Python"; def demonstrate_legb():") --> B("Local (L) — demonstrate_legb(); topic = "области видимости"; def inner():") --> D("Local (L) — inner(); nonlocal topic; topic = "LEGB и замыкания"; course — берется из Global")
+flowchart TD
+    B["Built-ins (B)<br>print, len, sum"]
+    G["Global (G)<br>course = 'Python'<br>demonstrate_legb()"]
+    L1["Local (L) — demonstrate_legb()<br>topic = 'области видимости'<br>inner()"]
+    L2["Local (L) — inner()<br>nonlocal topic<br>topic = 'LEGB и замыкания'<br>course — из Global"]
+
+    B --> G
+    G --> L1
+    L1 --> L2
+
+    L2 -.->|"ищет topic"| L1
+    L2 -.->|"ищет course"| G
 ```
