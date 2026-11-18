@@ -718,3 +718,70 @@ flowchart TD
     G --> L1
     L1 --> L2
 ```
+### Ошибка изменяемого значения по умолчанию
+Запускаем код:
+```python
+print('Ошибка изменяемого значения по умолчанию')
+def add_result(value: int, results: list[int] | None = None) -> list[int]:
+    """Добавляет результат в новый или переданный список без общего состояния."""
+    if results is None:
+        results = []
+    results.append(value)
+    return results
+first_result = add_result(1)
+second_result = add_result(2)
+assert first_result == [1]
+assert second_result == [2]
+assert first_result is not second_result
+print(first_result)
+print(second_result)
+```
+Результат:
+```text
+[1]
+[2]
+```
+В третьей части рассматривается ошибка изменяемого значения по умолчанию. В исходной функции `add_result(value, results=[])` список [] создается только один раз — в момент выполнения def, а не при каждом вызове функции. Поэтому все вызовы без второго аргумента используют один и тот же список. При вызове `add_result(1)` в список добавляется 1, при следующем вызове `add_result(2)` добавляется 2 в тот же список, и так далее. В результате результаты накапливаются: [1], [1, 2], [1, 2, 3]. Ошибка возникает потому, что метод `append()` изменяет существующий список, а не создает новый. Чтобы исправить это, в качестве значения по умолчанию используют `None`, а внутри функции создают новый список, если `results` не передан. Теперь каждый вызов без аргумента `results` получает собственный новый список.
+### Практическое расширение
+Запускаем код:
+```python
+print('Практическое расширение')
+def apply_to_results(
+    operation,
+    values,
+):
+    """Применяет переданную функцию к каждому результату."""
+    return [operation(value) for value in values]
+def double(value: int) -> int:
+    """Удваивает переданное значение."""
+    return value * 2
+doubled_results = apply_to_results(double, [1, 2, 3])
+incremented_results = apply_to_results(lambda value: value + 1, [1, 2, 3])
+assert doubled_results == [2, 4, 6]
+assert incremented_results == [2, 3, 4]
+print(doubled_results)
+print(incremented_results)
+def make_threshold_checker(threshold: int):
+    """Создает функцию для проверки достижения порога."""
+    def check(result: int) -> bool:
+        return result >= threshold
+    return check
+passed_80 = make_threshold_checker(80)
+passed_90 = make_threshold_checker(90)
+assert passed_80(85) is True
+assert passed_90(85) is False
+assert passed_80(90) is True
+assert passed_90(90) is True
+print(passed_80(85))
+print(passed_90(85))
+```
+Результат:
+```text
+Практическое расширение
+[2, 4, 6]
+[2, 3, 4]
+True
+False
+```
+В пятой части реализованы функции `apply_to_results()` и `make_threshold_checker()`. Функция `apply_to_results(operation, values)` принимает другую функцию и последовательность результатов, а затем применяет переданную функцию к каждому элементу. В нее можно передать как именованную функцию, например double, так и лямбда-функцию, например `lambda value: value + 1`. Функция `make_threshold_checker(threshold)` создает и возвращает другую функцию check, которая проверяет, достиг ли результат заданного порога. В замыкании сохраняется значение параметра `threshold`, которое было передано при создании функции. Например, passed_80 = `make_threshold_checker(80)` сохраняет значение 80, а `passed_90 = make_threshold_checker(90)` сохраняет значение 90. Поэтому `passed_80(85)` вернет True, потому что 85 >= 80, а `passed_90(85)` вернет False, потому что 85 < 90. Каждая возвращенная функция «помнит» свое значение порога из замыкания.
+## Задание 5. Анализатор учебных результатов
